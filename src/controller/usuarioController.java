@@ -16,6 +16,8 @@ import model.Pais;
 import model.Usuario;
 import service.UserService;
 import util.ConfereLogin;
+import util.CryptoException;
+import util.CryptoUtils;
 import service.PaisService;
 
 @WebServlet("/ManterUser.do")
@@ -24,6 +26,7 @@ public class usuarioController extends HttpServlet {
 	String login = null;
 	String senha = null;
 	String nome = null;
+	byte[] senhaCrypto = null;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request,response);
 
@@ -54,7 +57,16 @@ public class usuarioController extends HttpServlet {
 		Usuario usuario = new Usuario();
 		usuario.setNome(nome);
 		usuario.setLogin(login);
-		usuario.setSenha(senha);
+		
+		String key = "PRATPROGINTEGRAD";
+		byte[] bTexto = senha.getBytes("UTF-8");
+		try {
+			senhaCrypto = CryptoUtils.encrypt(key, bTexto);
+		} catch (CryptoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		usuario.setSenha(senhaCrypto);
 
 		ConfereLogin cl;
 		UserService us = new UserService();
@@ -70,10 +82,9 @@ public class usuarioController extends HttpServlet {
 			view = request.getRequestDispatcher("Usuario.jsp");	
 
 		}else if(acao.equals("Login")) {
-			cl = new ConfereLogin(usuario.getLogin(), usuario.getSenha());
+			cl = new ConfereLogin(usuario.getLogin(), senha);
 			usuario = cl.Confere();
 			if(usuario != null) {
-				
 				ArrayList<Pais>lista = new ArrayList<>();
 				lista = ps.listarTodos();
 				session.setAttribute("lista", lista);

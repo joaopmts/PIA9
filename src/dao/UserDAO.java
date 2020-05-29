@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
-
 import model.Usuario;
 
 public class UserDAO {
@@ -20,7 +18,7 @@ public class UserDAO {
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
 			stm.setString(1, usuario.getNome());
 			stm.setString(2, usuario.getLogin());
-			stm.setString(3, usuario.getSenha());
+			stm.setBytes(3, usuario.getSenha());
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
 			try (PreparedStatement stm2 = conn.prepareStatement(sqlQuery);
@@ -46,7 +44,7 @@ public class UserDAO {
 				PreparedStatement stm = conn.prepareStatement(sqlUpdate);) {
 			stm.setString(1, usuario.getNome());
 			stm.setString(2, usuario.getLogin());
-			stm.setString(3, usuario.getSenha());
+			stm.setBytes(3, usuario.getSenha());
 			stm.setInt(4, usuario.getId());
 			stm.execute();
 		} catch (Exception e) {
@@ -79,13 +77,13 @@ public class UserDAO {
 				if (rs.next()) {
 					usuario.setNome(rs.getString("nome"));
 					usuario.setLogin(rs.getString("login"));
-					usuario.setSenha(rs.getString("senha"));
+					usuario.setSenha(rs.getBytes("senha"));
 
 				} else {
 					usuario.setId(-1);
 					usuario.setNome(rs.getString(""));
 					usuario.setLogin(rs.getString(""));
-					usuario.setSenha(rs.getString(""));
+					usuario.setSenha(rs.getBytes(null));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -99,7 +97,7 @@ public class UserDAO {
 
 	public ArrayList<Usuario> listarTodos() {
 		ArrayList<Usuario> usuarios = new ArrayList<>();
-		String sqlSelect = "SELECT id, nome, login, senha FROM pais.user ";
+		String sqlSelect = "SELECT id, nome, login, senha FROM pais.user";
 
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlSelect);
@@ -109,7 +107,7 @@ public class UserDAO {
 				usuario.setId(rs.getInt("id"));
 				usuario.setNome(rs.getString("nome"));
 				usuario.setLogin(rs.getString("login"));
-				usuario.setSenha(rs.getString("senha"));
+				usuario.setSenha(rs.getBytes("senha"));
 				usuarios.add(usuario);
 			}
 		} catch (SQLException e) {
@@ -130,7 +128,7 @@ public class UserDAO {
 				if (rs.next()) {
 					usuario.setId(rs.getInt("id"));
 					usuario.setNome(rs.getString("nome"));
-					usuario.setSenha(rs.getString("senha"));
+					usuario.setSenha(rs.getBytes("senha"));
 				}else {
 					usuario = null;
 					

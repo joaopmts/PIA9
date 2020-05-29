@@ -14,7 +14,7 @@ public class ConfereLogin {
 	private Usuario user;
 	private Log log;
 	private String arquivo = "E:\\Praticas de Programacao Integrada\\Lab\\Aula 9 Ex 2\\WebContent\\log\\RegistroDeAcesso.txt";
-    private String key = "PRATPROGECP6ANMCA2";
+    private String key = "PRATPROGINTEGRAD";
 
 	public ConfereLogin(String login, String senha) {
 		setLogin(login);
@@ -26,11 +26,12 @@ public class ConfereLogin {
 
 	public Usuario Confere() {
 		if(Busca(getLogin()) == true) {
-	    
-			if(user.getSenha().equals(senha)) {
+			String confere = getSenha();
+			String SenhaUser = senhaUsuario(user.getSenha());
+			if(SenhaUser.equals(confere)) {
 				Calendar c = Calendar.getInstance();
 				try {
-					log.abrir(arquivo);
+					og.abrir(arquivo);
 					log.escrever("\nUsuario: "+getLogin()+" Fez acesso : "+c.getTime()+"\n\n");
 					log.fechar();
 				} catch (IOException e) {

@@ -2,11 +2,12 @@ package model;
 
 public class Usuario {
 	private int id;
-	private String login, nome, senha;
+	private String login, nome;
+	private byte[] senha;
 
 	public Usuario() {}
 	
-	public Usuario(int id, String login , String nome, String senha ) {
+	public Usuario(int id, String login , String nome, byte[] senha ) {
 		setId(id);
 		setNome(nome);
 		setLogin(login);
@@ -37,11 +38,11 @@ public class Usuario {
 		this.nome = nome;
 	}
 
-	public String getSenha() {
+	public byte[] getSenha() {
 		return senha;
 	}
 
-	public void setSenha(String senha) {
+	public void setSenha(byte[] senha) {
 		this.senha = senha;
 	}
 
