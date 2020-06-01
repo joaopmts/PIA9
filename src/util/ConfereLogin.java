@@ -31,7 +31,7 @@ public class ConfereLogin {
 			if(SenhaUser.equals(confere)) {
 				Calendar c = Calendar.getInstance();
 				try {
-					og.abrir(arquivo);
+					log.abrir(arquivo);
 					log.escrever("\nUsuario: "+getLogin()+" Fez acesso : "+c.getTime()+"\n\n");
 					log.fechar();
 				} catch (IOException e) {
